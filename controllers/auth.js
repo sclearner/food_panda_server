@@ -5,10 +5,10 @@ const RefreshToken = require("../models/RefreshToken");
 
 // Register a new user
 const register = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, name, dob, avatarUrl } = req.body;
 
   try {
-    const user = new User({ username, email, password: password });
+    const user = new User({ username, email, password, name, dob, avatarUrl });
     await user.save();
     res.status(201).json({ message: "Registration successful" });
   } catch (error) {
@@ -62,12 +62,11 @@ const getNewAccessToken = async (req, res) => {
 };
 
 const deleteRefreshToken = async (req, res) => {
-    try {
-        await RefreshToken.deleteOne({token: req.body.token});
-    }
-    catch (e) {
-        res.status(500).json({ ...e });
-    }
-}
+  try {
+    await RefreshToken.deleteOne({ token: req.body.token });
+  } catch (e) {
+    res.status(500).json({ ...e });
+  }
+};
 
-module.exports = { register, login, getNewAccessToken, deleteRefreshToken};
+module.exports = { register, login, getNewAccessToken, deleteRefreshToken };

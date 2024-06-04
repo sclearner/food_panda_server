@@ -6,6 +6,7 @@ curl -XPOST -H "Content-type: application/json" \
     \"username\": \"Viettel$i\",
     \"password\": \"VDT2024SE\",
     \"email\": \"vdt$i@viettel.com.vn\",
+    \"name\": \"Viettel Digital Talent\",
     \"avatarUrl\": \"https://nic.gov.vn/wp-content/uploads/2024/02/VDT2024-cover.png\"
     }" 'http://localhost:5000/api/v1/auth/register'
 done
