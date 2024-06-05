@@ -4,6 +4,7 @@ const connectDB = require('./database/db.js');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const menuRoutes = require('./routes/menu');
+const { search } = require('./controllers/menu.js');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -24,6 +25,8 @@ router.use('/user', userRoutes);
 
 // Define menu routes
 router.use('/menu', menuRoutes);
+
+router.get('/search', search);
 
 // Final app
 app.use('/api/v1', router);

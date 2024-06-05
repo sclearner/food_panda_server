@@ -7,23 +7,20 @@ async function search(req, res) {
     return res.status(400).json({ error: "Missing keyword" });
   }
   try {
-    const result = await Menu.find({
-      title: { $regex: `.*${req.query.keyword}.*` },
-    })
+    const result = await Menu.find(
+      {
+        title: { $regex: `.*${req.query.keyword}.*`, $options: "i" },
+      },
+      ["title", "subtitle", "gallery", "reviewStar", "reviewCount"]
+    )
       .skip(req.query.offset ?? 0)
       .limit(req.query.limit)
-      .select({
-        title: 1,
-        subtitle: 1,
-        gallery: 1,
-        reviewStar: 1,
-        reviewCount: 1,
-      })
       .exec();
     return res.status(200).json(result);
   } catch (e) {
     if (e instanceof MongooseError) {
-      return res.status(404).json({ error: "Not Found" });
+      print("Hello");
+      return res.status(404).json(e);
     }
     return res.status(500).json({ error: e.message });
   }
@@ -50,6 +47,8 @@ async function addDish(req, res) {
       image: req.body.image,
     });
     await dish.save();
+
+    return res.status(201).json({ message: "Dish Added" });
   } catch (err) {
     if (err instanceof MongooseError)
       return res.status(400).json({ message: err.message });
@@ -57,4 +56,17 @@ async function addDish(req, res) {
   }
 }
 
-module.exports = { search, getMenu, addDish};
+async function addMenu(req, res) {
+  if (!req.body) return res.status(400).json({ message: "Bad Request" });
+  try {
+    const menu = await new Menu(req.body);
+    await menu.save();
+    return res.status(201).json({ message: "Menu Added" });
+  } catch (err) {
+    if (err instanceof MongooseError)
+      return res.status(400).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
+  }
+}
+
+module.exports = { search, getMenu, addDish, addMenu };
