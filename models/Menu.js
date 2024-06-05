@@ -19,9 +19,7 @@ const menuSchema = mongoose.Schema({
     latitude: Number,
     longitude: Number,
     description: String,
-    dishes: {
-        type: [mongoose.SchemaTypes.ObjectId],
-    }
+    dishes: [{type: mongoose.SchemaTypes.ObjectId, ref: 'Dish'}],
 });
 
 const Menu = mongoose.model("Menu", menuSchema);
