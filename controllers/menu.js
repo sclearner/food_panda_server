@@ -29,7 +29,7 @@ async function search(req, res) {
 async function getMenu(req, res) {
   if (!req.params.id) return res.status(400).json({ error: "Required id" });
   try {
-    const menu = await Menu.findById(req.params.id);
+    const menu = await Menu.findById(req.params.id).populate('dishes').exec();
     return res.status(200).json(menu);
   } catch (e) {
     if (e instanceof MongooseError)
